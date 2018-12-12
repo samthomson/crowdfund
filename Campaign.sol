@@ -65,7 +65,7 @@ contract Campaign {
         require(!rLocalRequest.complete);
         
         // discharge funds
-        rLocalRequest.recipient.transfer(request.value);
+        rLocalRequest.recipient.transfer(rLocalRequest.value);
         
         rLocalRequest.complete = true;
     }
