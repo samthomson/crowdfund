@@ -36,9 +36,22 @@ contract Campaign {
             description: description,
             value: value,
             recipient: recipient,
-            complete: false
+            complete: false,
+            approvalCount: 0
         });
         
         requests.push(newRequest);
+    }
+    
+    function approveRequest(uint iRequestIndex) public {
+        Request storage rLocalRequest = requests[iRequestIndex];
+        // is the caller a contributor?
+        require(approvers[msg.sender]);
+        // and hasn't already voted on this issue
+        require(!rLocalRequest.approvedByContributors[msg.sender]);
+        
+        // cast there vote, and record they have voted
+        rLocalRequest.approvalCount++;
+        rLocalRequest.approvedByContributors[msg.sender] = true;
     }
 }
