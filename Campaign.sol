@@ -14,6 +14,7 @@ contract Campaign {
     address public manager;
     uint public minimumContribution;
     mapping(address => bool) public approvers;
+    uint public approversCount;
     
     modifier restricted() {
         require(msg.sender == manager);
@@ -29,6 +30,7 @@ contract Campaign {
         require(msg.value > minimumContribution);
         
         approvers[msg.sender] = true;
+        approversCount++;
     }
     
     function createRequest(string description, uint value, address recipient) public restricted {
@@ -53,5 +55,18 @@ contract Campaign {
         // cast there vote, and record they have voted
         rLocalRequest.approvalCount++;
         rLocalRequest.approvedByContributors[msg.sender] = true;
+    }
+    
+    function finalizeRequest(uint iRequestIndex) public restricted {
+        Request storage rLocalRequest = requests[iRequestIndex];
+        // majority?
+        require(rLocalRequest.approvalCount > (approversCount / 2));
+        // check not already marked complete
+        require(!rLocalRequest.complete);
+        
+        // discharge funds
+        rLocalRequest.recipient.transfer(request.value);
+        
+        rLocalRequest.complete = true;
     }
 }
