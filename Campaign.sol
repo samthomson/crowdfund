@@ -5,7 +5,7 @@ contract CampaignFactory {
     
     function createCampaign(uint minimumContribution) public {
         address newCampaign = new Campaign(minimumContribution, msg.sender);
-        deployedCampaigns.push(newCampaignw);
+        deployedCampaigns.push(newCampaign);
     }
     
     function getDeployedCampaigns() public view returns (address[]) {
