@@ -1,6 +1,7 @@
 const HDWalletProvider = require('truffle-hdwallet-provider')
 const Web3 = require('web3')
-const { interface, bytecode } = require('./compile')
+const compiledFactory = require('./build/CampaignFactory.json')
+
 const envVars = require('./env')
 
 const provider = new HDWalletProvider(
@@ -17,11 +18,11 @@ const deploy = async () => {
     console.log(`we will be deploying with public key ${deployAccount}`)
 
     const deployResult = await new web3.eth.Contract(
-        JSON.parse(interface)
+        JSON.parse(compiledFactory.interface)
     )
     .deploy(
         {
-            data: bytecode
+            data: compiledFactory.bytecode
         }
     )
     .send({
@@ -30,10 +31,6 @@ const deploy = async () => {
     })
 
     console.log(`contract deployed to ${deployResult.options.address}`)
-
-    console.log(`with ABI: ${interface}`)
-
-
 }
 
 deploy()
