@@ -8,11 +8,14 @@ class CampaignNew extends Component {
 
     state = {
         errorMessage: '',
+        loading: false,
         minimumContribution: ''
     }
 
     onSubmit = async (event) => {
         event.preventDefault()
+
+        this.setState({ loading: true })
 
         try {
             const accounts = await web3.eth.getAccounts()
@@ -27,6 +30,7 @@ class CampaignNew extends Component {
             // error occured creating campaign
             this.setState({ errorMessage: err.message })
         }
+        this.setState({ loading: false })
     }
 
     render() {
@@ -52,7 +56,10 @@ class CampaignNew extends Component {
                         header="Error.."
                         content={this.state.errorMessage}
                     />
-                    <Button primary>Create</Button>
+                    <Button
+                        loading={this.state.loading}
+                        primary
+                    >Create</Button>
                 </Form>
             </Layout>
         )
