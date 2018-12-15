@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
+import Layout from './../../components/Layout'
 
 class ShowCampaign extends Component {
 
     render() {
         return (
-            <h3>Campaign</h3>
+            <Layout>
+                <h3>Campaign</h3>
+            </Layout>
         )
     }
 }
