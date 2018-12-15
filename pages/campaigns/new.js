@@ -34,7 +34,7 @@ class CampaignNew extends Component {
             <Layout>
                 <h3>Create a campaign</h3>
                 <Form
-                    error={this.state.errorMessage}
+                    error={!!this.state.errorMessage}
                     onSubmit={this.onSubmit}
                 >
                     <Form.Field>
