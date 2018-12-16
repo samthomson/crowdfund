@@ -87,12 +87,14 @@ contract Campaign {
         uint,
         uint,
         uint,
+        uint,
         address
     ) {
         return (
             minimumContribution,
             this.balance,
             requests.length,
+            approversCount,
             manager
         );
     }
