@@ -1,8 +1,25 @@
 import React, { Component } from 'react'
-import { Table } from 'semantic-ui-react'
+import { Button, Table } from 'semantic-ui-react'
 import web3 from './../ethereum/web3'
+import Campaign from './../ethereum/campaign'
 
 class RequestRow extends Component {
+
+    onApprove = async () => {
+        const campaign = Campaign(this.props.address)
+        const accounts = await web3.eth.getAccounts()
+        await campaign.methods.approveRequest(this.props.id).send({
+            from: accounts[0]
+        })
+    }
+
+    onFinalize = async () =>{
+        const campaign = Campaign(this.props.address)
+        const accounts = await web3.eth.getAccounts()
+        await campaign.methods.finalizeRequest(this.props.id).send({
+            from: accounts[0]
+        })
+    }
 
     render () {
         const { Cell, Row } = Table
@@ -12,12 +29,17 @@ class RequestRow extends Component {
             description,
             recipient
         } = this.props.request
+        const { 
+            approversCount,
+            id
+        } = this.props
+
 
 
         return (
             <Row>
                 <Cell>
-                    {this.props.id}
+                    {id}
                 </Cell>
                 <Cell>
                     {description}
@@ -29,13 +51,21 @@ class RequestRow extends Component {
                     {recipient}
                 </Cell>
                 <Cell>
-                    {approvalCount}
+                    {approvalCount} / {approversCount}
                 </Cell>
                 <Cell>
-                    {this.key}
+                    <Button
+                        basic
+                        color="green"
+                        onClick={this.onApprove}
+                    >Approve</Button>
                 </Cell>
                 <Cell>
-                    {this.key}
+                    <Button
+                        basic
+                        color="teal"
+                        onClick={this.onFinalize}
+                    >Finalise</Button>
                 </Cell>
             </Row>
         )
