@@ -24,6 +24,7 @@ class RequestRow extends Component {
     render () {
         const { Cell, Row } = Table
         const { 
+            complete,
             value,
             approvalCount,
             description,
@@ -33,11 +34,12 @@ class RequestRow extends Component {
             approversCount,
             id
         } = this.props
+        const readyToFinalise = (approvalCount >= approvalCount / 2) && !complete
 
 
 
         return (
-            <Row>
+            <Row disabled={complete} positive={readyToFinalise}>
                 <Cell>
                     {id}
                 </Cell>
@@ -54,18 +56,22 @@ class RequestRow extends Component {
                     {approvalCount} / {approversCount}
                 </Cell>
                 <Cell>
-                    <Button
-                        basic
-                        color="green"
-                        onClick={this.onApprove}
-                    >Approve</Button>
+                    {complete ? null : ( 
+                        <Button
+                            basic
+                            color="green"
+                            onClick={this.onApprove}
+                        >Approve</Button>
+                    )}
                 </Cell>
                 <Cell>
-                    <Button
-                        basic
-                        color="teal"
-                        onClick={this.onFinalize}
-                    >Finalise</Button>
+                    {complete ? null : ( 
+                        <Button
+                            basic
+                            color="teal"
+                            onClick={this.onFinalize}
+                        >Finalise</Button>
+                    )}
                 </Cell>
             </Row>
         )
